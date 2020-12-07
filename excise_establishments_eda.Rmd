@@ -1,0 +1,57 @@
+---
+title: "Excise establishments EDA"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(skimr)
+```
+
+```{r import_data}
+stl_excise_establishments <- read_csv("excise-establishments.csv") %>% 
+  janitor::clean_names()
+
+stl_excise_establishments %>% 
+  skim()
+
+
+```
+
+
+## EDA
+
+```{r eda_bar_plot}
+
+# maybe neighborhood name?
+stl_excise_establishments %>% 
+  count(neighborhood_name, sort = TRUE)
+
+stl_excise_establishments %>% 
+  filter(!is.na(neighborhood_name)) %>% 
+  ggplot(aes(neighborhood_name, fill = status_code)) +
+  geom_bar() +
+  coord_flip()
+
+# status code
+stl_excise_establishments %>% 
+  count(status_code)
+
+stl_excise_establishments %>% 
+  ggplot(aes(status_code)) +
+  geom_bar()
+```
+Bar plot this, multi-select (?) for neighborhoods of interest
+
+
+```{r eda_histogram}
+stl_excise_establishments %>% 
+  glimpse()
+
+stl_excise_establishments %>% 
+  ggplot(aes(police_district_when_last_updated)) +
+  geom_histogram()
+```
+
