@@ -2,11 +2,7 @@
 library(shiny)
 library(dplyr)
 library(ggplot2)
-library(forcats)
-library(plotly)
-library(DT)
 
-# Define server logic required to draw a histogram
 shinyServer(function(input, output) {
     
     # make data available to the app
@@ -18,12 +14,12 @@ shinyServer(function(input, output) {
         if (input$bar_order == "Ascending") {
             status_bar_plot <- stl_excise_establishments %>% 
                 count(status_code) %>% 
-                ggplot(aes(fct_reorder(status_code, n), n)) +
+                ggplot(aes(forcats::fct_reorder(status_code, n), n)) +
                 geom_col() 
         } else if (input$bar_order == "Descending") {
             status_bar_plot <- stl_excise_establishments %>% 
                 count(status_code) %>% 
-                ggplot(aes(fct_reorder(status_code, n, .desc = TRUE), n)) +
+                ggplot(aes(forcats::fct_reorder(status_code, n, .desc = TRUE), n)) +
                 geom_col()
         } else {
             status_bar_plot <- stl_excise_establishments %>% 
@@ -42,9 +38,9 @@ shinyServer(function(input, output) {
         stl_excise_establishments %>% 
             filter(!is.na(neighborhood_name),
                    status_code %in% input$status_codes) %>% 
-            mutate(neighborhoods_lumped = fct_lump(neighborhood_name, input$neighborhoods)) %>% 
+            mutate(neighborhoods_lumped = forcats::fct_lump(neighborhood_name, input$neighborhoods)) %>% 
             # count(neighborhoods_lumped) %>% 
-            ggplot(aes(fct_rev(fct_infreq(neighborhoods_lumped)), fill = status_code)) +
+            ggplot(aes(forcats::fct_rev(forcats::fct_infreq(neighborhoods_lumped)), fill = status_code)) +
             geom_bar() +
             coord_flip() + 
             labs(x = "Neighborhood name",

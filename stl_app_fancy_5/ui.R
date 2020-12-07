@@ -1,7 +1,6 @@
 
 library(shiny)
 
-# Define UI for application that draws a histogram
 shinyUI(fluidPage(
 
     # shinythemes::themeSelector(),
@@ -10,7 +9,6 @@ shinyUI(fluidPage(
     # Application title
     titlePanel("STL Excise Establishments"),
 
-    # Sidebar with a slider input for number of bins
     sidebarLayout(
         sidebarPanel(
             selectInput("bar_order",
@@ -34,7 +32,6 @@ shinyUI(fluidPage(
                                selected = c("CLOSED", "ACTIVE", "OPEN", "CANCELLED", "RENEWAL"))
         ),
 
-        # Show a plot of the generated distribution
         mainPanel(
             tabsetPanel(
                 tabPanel("Status Count", plotly::plotlyOutput("statusBarPlot")),
