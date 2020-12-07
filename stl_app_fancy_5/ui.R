@@ -1,0 +1,46 @@
+
+library(shiny)
+
+# Define UI for application that draws a histogram
+shinyUI(fluidPage(
+
+    # shinythemes::themeSelector(),
+    theme = shinythemes::shinytheme("flatly"),
+    
+    # Application title
+    titlePanel("STL Excise Establishments"),
+
+    # Sidebar with a slider input for number of bins
+    sidebarLayout(
+        sidebarPanel(
+            selectInput("bar_order",
+                        "Order of bars:",
+                        choices = c("Alphabetical (default)",
+                                    "Ascending",
+                                    "Descending")),
+            sliderInput("neighborhoods",
+                        "Number of neighborhoods to display (besides Other):",
+                        min = 1,
+                        max = 15,
+                        value = 6,
+                        step = 1),
+            checkboxGroupInput("status_codes",
+                               "Status of establishment:",
+                               choices = c("Closed" = "CLOSED",
+                                           "Active" = "ACTIVE",
+                                           "Open" = "OPEN",
+                                           "Cancelled" = "CANCELLED",
+                                           "Renewal" = "RENEWAL" ),
+                               selected = c("CLOSED", "ACTIVE", "OPEN", "CANCELLED", "RENEWAL"))
+        ),
+
+        # Show a plot of the generated distribution
+        mainPanel(
+            tabsetPanel(
+                tabPanel("Status Count", plotly::plotlyOutput("statusBarPlot")),
+                tabPanel("Status by Neighborhood", plotly::plotlyOutput("statusNeighborhoodBarPlot")),
+                tabPanel("Excise Establishments DT", DT::dataTableOutput("exciseEstablishmentsDT"))
+            )
+        )
+    )
+))

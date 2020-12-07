@@ -37,7 +37,11 @@ stl_excise_establishments %>%
 
 # status code
 stl_excise_establishments %>% 
-  count(status_code)
+  mutate(status_code = as.factor(status_code)) %>% 
+  # count(status_code) %>% 
+  fct_reorder2(status_code) %>% 
+  ggplot(aes(status_code)) +
+  geom_bar()
 
 stl_excise_establishments %>% 
   ggplot(aes(status_code)) +
@@ -53,5 +57,22 @@ stl_excise_establishments %>%
 stl_excise_establishments %>% 
   ggplot(aes(police_district_when_last_updated)) +
   geom_histogram()
+```
+
+
+
+```{r forcats_tests} 
+stl_excise_establishments %>% 
+  count(neighborhood_name) %>% 
+  ggplot(aes(fct_reorder(neighborhood_name, n), n)) +
+  geom_col() + 
+  coord_flip()
+
+stl_excise_establishments %>% 
+  filter(!is.na(neighborhood_name)) %>% 
+  mutate(neighborhoods_lumped = fct_lump(neighborhood_name, 12)) %>% 
+  ggplot(aes(neighborhoods_lumped)) +
+  geom_bar() +
+  coord_flip()
 ```
 
