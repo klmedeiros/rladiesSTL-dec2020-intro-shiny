@@ -11,15 +11,18 @@ shinyServer(function(input, output) {
     
     output$statusBarPlot <- plotly::renderPlotly({
         
+      by_status_code <- stl_excise_establishments %>% 
+        count(status_code)
+      
         if (input$bar_order == "Ascending") {
-            status_bar_plot <- stl_excise_establishments %>% 
-                count(status_code) %>% 
-                ggplot(aes(forcats::fct_reorder(status_code, n), n)) +
+            status_bar_plot <- by_status_code %>% 
+                mutate(status_code = fct_reorder(status_code, n)) %>% 
+                ggplot(aes(status_code, n)) +
                 geom_col() 
         } else if (input$bar_order == "Descending") {
-            status_bar_plot <- stl_excise_establishments %>% 
-                count(status_code) %>% 
-                ggplot(aes(forcats::fct_reorder(status_code, n, .desc = TRUE), n)) +
+            status_bar_plot <- by_status_code %>% 
+                mutate(status_code = fct_reorder(status_code, n, .desc = TRUE)) %>% 
+                ggplot(aes(status_code, n)) +
                 geom_col()
         } else {
             status_bar_plot <- stl_excise_establishments %>% 

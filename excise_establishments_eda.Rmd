@@ -76,3 +76,8 @@ stl_excise_establishments %>%
   coord_flip()
 ```
 
+```{r}
+by_status_code %>% 
+  mutate(status_code_b = forcats::fct_reorder(status_code, n))
+```
+
